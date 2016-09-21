@@ -25,7 +25,7 @@ get_opt_value() {
     local this_opt=${1:1:1}
 
     # if last pass found the target opt, return it
-    [[ "${is_opt:0:3}" == " ${return_what}" ]] && echo ${is_opt:4:9999} && return 0
+    [[ "${is_opt:0:2}" == "${return_what}" ]] && echo ${is_opt:3:99999} && return 0
 
     # If we are not collecting all opts, start fresh
     [[ "${return_what}" != "all_opts" ]] && is_opt=""
@@ -34,18 +34,18 @@ get_opt_value() {
     [[ "${1}" == "--" ]] && shift && break
 
     # If option expects arg and is followed by an = then its "self contained"
-    [[ "${opts}" == *"${this_opt}:"* && "${1}" == -${this_opt}=* ]] && is_opt="${is_opt} -${this_opt} ${1:3:9999}" && shift 1 && continue
+    [[ "${opts}" == *"${this_opt}:"* && "${1}" == -${this_opt}=* ]] && is_opt="${is_opt}${is_opt:+ }-${this_opt} ${1#*=}" && shift 1 && continue
 
-    # If option expects arg and next arg is another option (-*) then return option & no_value
-    [[ "${opts}" == *"${this_opt}:"* && "${2:0:1}" == "-" ]] && is_opt="${is_opt} -${this_opt} ${no_value}" && shift 1 && continue
+    # If option expects arg and next arg is another option (starts with -) then return option & no_value
+    [[ "${opts}" == *"${this_opt}:"* && "${2:0:1}" == "-" ]] && is_opt="${is_opt}${is_opt:+ }-${this_opt} ${no_value}" && shift 1 && continue
 
     # Otherwise If option expects arg return arg and next value
-    [[ "${opts}" == *"${this_opt}:"* ]] && is_opt="${is_opt} -${this_opt} ${2}" && shift 2 && continue
+    [[ "${opts}" == *"${this_opt}:"* ]] && is_opt="${is_opt}${is_opt:+ }-${this_opt} ${2}" && shift 2 && continue
 
-    [[ "${opts}" == *"${this_opt}"* ]] && is_opt="${is_opt} -${this_opt}" && shift 1 && continue
+    [[ "${opts}" == *"${this_opt}"* ]] && is_opt="${is_opt}${is_opt:+ }-${this_opt}" && shift 1 && continue
 
     # otherwise its not one of ours
-    not_opt="${not_opt} ${1}"
+    not_opt="${not_opt}${not_opt+ }${1}"
     shift 1
   done
 
