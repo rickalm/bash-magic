@@ -56,29 +56,3 @@ get_opt_value() {
   # Otherwise return the option (or options)
   echo ${is_opt}
 }
-
-test_new
-test_result 0
-test_expect -a -c one -b two
-test_case get_opts ab:c:defg -z -a -c one -b two -- -e fred barney
-
-test_new
-test_result 0
-test_expect -a -c one -b two
-test_case get_opts ab:c:defg -z -a -c one -b=two -- -e fred barney
-
-test_new
-test_result 0
-test_expect -z -e fred barney
-test_case strip_opts ab:c:defg -z -a -c one -b=two -- -e fred barney
-
-test_new
-test_result 0
-test_expect -a -c ? -b two
-test_case get_opts ab:c:defg -z -a -c -b=two -- -e fred barney
-
-test_new
-test_result 0
-test_expect two
-test_case get_opt_value -b ab:c:defg -z -a -c -b=two -- -e fred barney
-

@@ -1,0 +1,47 @@
+# Test that primivative parsers work
+#
+
+exhibitor_delete_node http://${TEST_EXHIBITOR} /mutex
+exhibitor_delete_node http://${TEST_EXHIBITOR} /test_tools
+
+test_new '{"message":"OK","succeeded":true}'
+test_result 0 'true'
+test_case _exhibitor_jq_success
+test_result 0 'OK'
+test_case _exhibitor_jq_message
+
+test_new '{"path":"/test", "str":"string", "bytes": "01 02 03"}'
+test_result 0 "/test"
+test_case _exhibitor_jq_node_path
+test_result 0 "string"
+test_case _exhibitor_jq_node_str
+test_result 0 "01 02 03"
+test_case _exhibitor_jq_node_bytes
+
+test_znode=/test_tools/exhibitor
+
+for key in key3 key2 key1; do
+  test_new
+  test_result 0 '{"message":"OK","succeeded":true}'
+  test_case exhibitor_put_node http://${TEST_EXHIBITOR} ${test_znode}/${key} Test-${key}
+
+  test_new
+  test_result 0 Test-${key}
+  test_case exhibitor_get_node_str http://${TEST_EXHIBITOR} ${test_znode}/${key}
+done
+
+test_new
+test_result 0 '["key1","key2","key3"]'
+test_case exhibitor_get_tree_titles http://${TEST_EXHIBITOR} ${test_znode}
+
+test_new
+test_result 0 3
+test_case 'exhibitor_get_node http://${TEST_EXHIBITOR} ${test_znode} | jq -r .numChildren'
+
+test_new
+test_result 0 ${test_znode}
+test_case 'exhibitor_get_node http://${TEST_EXHIBITOR} ${test_znode} | jq -r .path'
+
+_exhibitor_get_tree http://${TEST_EXHIBITOR} /
+
+echo

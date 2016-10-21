@@ -1,0 +1,47 @@
+exhibitor_delete_key http://${TEST_EXHIBITOR} /mutex
+exhibitor_delete_key http://${TEST_EXHIBITOR} /test_tools/mutex
+
+test_new
+test_result 0
+test_expect OK /mutex
+test_case mutex_set_provider exhibitor://${TEST_EXHIBITOR}
+
+test_new
+test_result 0
+test_expect OK /mutex
+test_case mutex_set_provider exhibitor://${TEST_EXHIBITOR}/
+
+test_new
+test_result 0
+test_expect OK /test_tools/mutex
+test_case mutex_set_provider exhibitor://${TEST_EXHIBITOR}/test_tools/mutex
+
+test_new
+test_result 0
+test_expect OK
+test_case mutex_get_lock maintenance
+test_case mutex_get_lock maintenance
+mutex_check_lock maintenance
+exit
+
+
+exhibitor_get_tree_titles http://${TEST_EXHIBITOR} /test_tools/mutex/maintenance
+_exhibitor_get_tree http://${TEST_EXHIBITOR} /test_tools/mutex/maintenance
+
+
+
+#
+#test_new
+#test_result 0
+#test_expect -z -e fred barney
+#test_case strip_opts ab:c:defg -z -a -c one -b=two -- -e fred barney
+#
+#test_new
+#test_result 0
+#test_expect -a -c ? -b two
+#test_case get_opts ab:c:defg -z -a -c -b=two -- -e fred barney
+#
+#test_new
+#test_result 0
+#test_expect two
+#test_case get_opt_value -b ab:c:defg -z -a -c -b=two -- -e fred barney

@@ -77,3 +77,10 @@ say() {
 
   echo -n ${this_file} \[$(say_level_to_tag ${this_level})\]${heading}${prefix} $(say_strip_opts $@) >&2
 }
+
+expose() {
+  while [ -n "$1" ]; do
+    local next_var=$1; shift
+    echo ${FUNCNAME[1]} Var ${next_var} is ..${!next_var}.. >&2
+  done
+}

@@ -31,7 +31,7 @@ local_ip_list() {
     *) say_error Could not find a way to check IP; return 1
   esac
 
-  $fetch_cmd | tr ' ' '\n' | grep -P '\d+\.\d+\.\d+\.\d+/\d+' | grep -Pv '^(127\.|172.17)' | cut -d/ -f1
+  $fetch_cmd | tr ' ' '\n' | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(/[0-9]+)*' | grep -Ev '^(127\.|172.17)' | cut -d/ -f1
 }
 
 sort_list() {

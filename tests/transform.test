@@ -1,0 +1,9 @@
+test_new
+test_result 0
+test_expect 'test%2fone'
+test_case urlencode test/one
+
+test_new
+test_result 0
+test_expect 'test/one'
+test_case urldecode 'test%2fone'
