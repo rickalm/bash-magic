@@ -1,0 +1,20 @@
+echo one >/tmp/test_subject
+
+test_new
+test_result 0
+test_expect one
+test_case cache_it cat /tmp/test_subject
+
+echo two >/tmp/test_subject
+
+test_new
+test_result 0
+test_expect one
+test_case cache_it cat /tmp/test_subject
+
+flush_cache cat /tmp/test_subject
+
+test_new
+test_result 0
+test_expect two
+test_case cache_it cat /tmp/test_subject

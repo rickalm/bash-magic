@@ -22,6 +22,10 @@ mute() {
   return $?
 }
 
+entering() {
+  echo ${FUNCNAME[1]} entering $@ >&2
+}
+
 local_ip_list() {
   need grep cut || return 1
 

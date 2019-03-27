@@ -87,6 +87,8 @@ test_results_passed=0
 test_results_failed=0
 test_fail_exit=true
 
+test_target=$(basename $test_target .test)
+
 for module in $(ls functions/*.sh | grep -v ${test_target}.sh); do
   . ${module}
 done
