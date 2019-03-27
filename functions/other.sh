@@ -38,6 +38,8 @@ local_ip_list() {
   $fetch_cmd | tr ' ' '\n' | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(/[0-9]+)*' | grep -Ev '^(127\.|172.17)' | cut -d/ -f1
 }
 
-sort_list() {
-  echo $@ $(cat | tr '\n' ' ') | tr ' ' '\n' | sort -u | tr '\n' ' '
+function unregex {
+   # This is a function because dealing with quotes is a pain.
+   # http://stackoverflow.com/a/2705678/120999
+   sed -e 's/[]\/()$*.^|[]/\\&/g' <<< "$1"
 }
